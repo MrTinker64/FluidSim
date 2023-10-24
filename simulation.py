@@ -51,6 +51,10 @@ def main():
 
         pygame.display.flip()
         clock.tick(60)  # Limiting to 60 frames per second (fps)
+        
+        # Ends simulation after 7 seconds
+        if current_time > 7000:
+            return
 
     pygame.quit()
     sys.exit()
