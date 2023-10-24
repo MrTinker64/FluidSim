@@ -68,7 +68,7 @@ def resolve_collisions(particle: Particle):
     p = particle
     bound_height = WINDOW_HEIGHT - PARTICLE_SIZE
 
-    if (p.position[1] > WINDOW_HEIGHT):
+    if (p.position[1] > bound_height):
         p.position[1] = bound_height * np.sign(p.position[1])
         p.velocity[1] *= -1 * COLLISION_DAMPING
         
