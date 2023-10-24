@@ -9,6 +9,7 @@ PARTICLE_COUNT = 100
 PARTICLE_SIZE = 4
 PARTICLE_MASS = 1
 FLUID_DENSITY = 1
+GRAVITY = 1
 
 class Particle:
     def __init__(self, x, y):
@@ -26,6 +27,9 @@ def main():
     clock = pygame.time.Clock()
 
     running = True
+    
+    last_update_time = pygame.time.get_ticks()
+    
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -33,11 +37,12 @@ def main():
 
         screen.fill((0, 0, 0))  # Fill the screen with black
 
+        current_time = pygame.time.get_ticks()
+        dt = (current_time - last_update_time) / 1000.0
+        
         # Update particle physics
         for particle in particles:
-            # Here you'll calculate forces, update velocities, and move the particles.
-            # Initially, you can apply simple Euler integration for movement.
-            pass  # Remove this when you add real code.
+            compute_forces(particle, dt)
 
         # Render particles
         for particle in particles:
@@ -48,6 +53,10 @@ def main():
 
     pygame.quit()
     sys.exit()
+    
+def compute_forces(particle: Particle, dt: float):
+    particle.velocity += np.array([0, 1], dtype=float) * GRAVITY * dt
+    particle.position += particle.velocity * dt
         
 if __name__ == "__main__":
     main()
