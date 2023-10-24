@@ -58,6 +58,15 @@ def main():
 def compute_forces(particle: Particle, dt: float):
     particle.velocity += np.array([0, 1], dtype=float) * GRAVITY * dt
     particle.position += particle.velocity * dt
+    resolve_collisions(particle)
+    
+def resolve_collisions(particle: Particle):
+    p = particle
+    bound_height = WINDOW_HEIGHT - RADIUS
+
+    if (p.position[1] > WINDOW_HEIGHT):
+        p.position[1] = bound_height * np.sign(p.position[1])
+        p.velocity[1] *= -1
         
 if __name__ == "__main__":
     main()
