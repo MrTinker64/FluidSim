@@ -10,6 +10,7 @@ PARTICLE_SIZE = 4
 PARTICLE_MASS = 1
 FLUID_DENSITY = 1
 GRAVITY = 1
+RADIUS = 1
 
 class Particle:
     def __init__(self, x, y):
@@ -46,7 +47,7 @@ def main():
 
         # Render particles
         for particle in particles:
-            pygame.draw.circle(screen, (255, 255, 255), (int(particle.position[0]), int(particle.position[1])), PARTICLE_SIZE)
+            pygame.draw.circle(screen, (255, 255, 255), (int(particle.position[0]), int(particle.position[RADIUS])), PARTICLE_SIZE)
 
         pygame.display.flip()
         clock.tick(60)  # Limiting to 60 frames per second (fps)
