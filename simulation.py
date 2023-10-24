@@ -10,6 +10,7 @@ PARTICLE_SIZE = 4
 PARTICLE_MASS = 1
 FLUID_DENSITY = 1
 GRAVITY = 1
+COLLISION_DAMPING = 0.75
 
 class Particle:
     def __init__(self, x, y):
@@ -65,7 +66,7 @@ def resolve_collisions(particle: Particle):
 
     if (p.position[1] > WINDOW_HEIGHT):
         p.position[1] = bound_height * np.sign(p.position[1])
-        p.velocity[1] *= -1
+        p.velocity[1] *= -1 * COLLISION_DAMPING
         
 if __name__ == "__main__":
     main()
