@@ -9,7 +9,7 @@ PARTICLE_COUNT = 100
 PARTICLE_SIZE = 4
 PARTICLE_MASS = 1
 FLUID_DENSITY = 1
-GRAVITY = 1
+GRAVITY = 0.05
 COLLISION_DAMPING = 0.75
 
 class Particle:
@@ -52,8 +52,8 @@ def main():
         pygame.display.flip()
         clock.tick(60)  # Limiting to 60 frames per second (fps)
         
-        # Ends simulation after 7 seconds
-        if current_time > 7000:
+        # Ends simulation after 10 seconds
+        if current_time > 10000:
             return
 
     pygame.quit()
