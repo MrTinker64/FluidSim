@@ -11,6 +11,7 @@ PARTICLE_MASS = 1
 FLUID_DENSITY = 1
 GRAVITY = 0.05
 COLLISION_DAMPING = 0.75
+SMOOTHING_RADIUS = 5
 
 class Particle:
     def __init__(self, x, y):
@@ -52,6 +53,8 @@ def main():
         pygame.display.flip()
         clock.tick(60)  # Limiting to 60 frames per second (fps)
         
+        print(particles[0].density)
+        
         # Ends simulation after 10 seconds
         if current_time > 10000:
             return
@@ -63,6 +66,7 @@ def compute_forces(particle: Particle, dt: float):
     particle.velocity += np.array([0, 1], dtype=float) * GRAVITY * dt
     particle.position += particle.velocity * dt
     resolve_collisions(particle)
+    particle.density = calculate_density(particle.position)
     
 def resolve_collisions(particle: Particle):
     p = particle
@@ -71,6 +75,24 @@ def resolve_collisions(particle: Particle):
     if (p.position[1] > bound_height):
         p.position[1] = bound_height * np.sign(p.position[1])
         p.velocity[1] *= -1 * COLLISION_DAMPING
+        
+def smoothing_kernel(radius: float, dst: float):
+    volume = np.pi * np.power(radius, 7) / 4
+    value = np.maximum(0, radius * radius - dst * dst)
+    return value * value * value / volume
+
+def calculate_density(sample_point):
+    density = 0
+    mass = 1
+    
+    # TODO optimize to only look at particles in smoothing radius
+    for particle in particles:
+        position = particle.position
+        dst = np.linalg.norm(position - sample_point) # finds magnitude
+        influence = smoothing_kernel(SMOOTHING_RADIUS, dst)
+        density += mass * influence
+        
+    return density
         
 if __name__ == "__main__":
     main()
