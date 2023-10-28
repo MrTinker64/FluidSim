@@ -17,19 +17,6 @@ def compute_next_state():
     modify_velocity_values()
     projection()
     advection()
-    
-while current_simulation_time < total_simulation_time:        
-    start_real_time = time.time() # Capture the real-world time before processing    
-    
-    state = compute_next_state(state, dt)
-    
-    current_simulation_time += dt
-    
-    # If you want sim to run in real time
-    end_real_time = time.time()
-    processing_time = end_real_time - start_real_time
-    if processing_time < dt:
-        time.sleep(dt - processing_time)
 
 def modify_velocity_values():
     pass
@@ -42,3 +29,16 @@ def projection():
 
 def advection():
     pass
+
+while current_simulation_time < total_simulation_time:        
+    start_real_time = time.time() # Capture the real-world time before processing    
+    
+    state = compute_next_state(state, dt)
+    
+    current_simulation_time += dt
+    
+    # If you want sim to run in real time
+    end_real_time = time.time()
+    processing_time = end_real_time - start_real_time
+    if processing_time < dt:
+        time.sleep(dt - processing_time)
