@@ -3,6 +3,14 @@ import time
 
 width, height = 10, 10 
 
+physical_width = 1  # e.g., 1 meter
+physical_height = 1  # e.g., 1 meter this means were simulating fluid in a 1m x 1m space
+
+h_x = physical_width / (width - 1)  # the space between points on the x-axis
+h_y = physical_height / (height - 1)  # the space between points on the y-axis
+
+h = h_x + h_y / 2
+
 grid = np.zeros((height, width, 1))
 
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
