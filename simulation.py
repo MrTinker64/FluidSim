@@ -3,14 +3,14 @@ import time
 
 width, height = 10, 10 
 
-grid = np.zeros((height, width))
+grid = np.zeros((height, width, 1))
 
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
 
 for i in range(height):
     for j in range(width):
-        grid[i, j] = [0, 0]
+        grid[i, j] = [0]
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
@@ -26,11 +26,11 @@ def compute_next_state():
 def modify_velocity_values():
     v_velocity[1:-1, :] += g * dt  
 
-def update_velocity():
-    pass
-
 def projection():
-    pass
+    for i in range(height):
+        for j in range(width):
+            divergence = u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j]
+            grid[i, j, 1] = [divergence]
 
 def advection():
     pass
