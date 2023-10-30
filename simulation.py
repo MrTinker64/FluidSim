@@ -8,7 +8,7 @@ physical_height = 1  # e.g., 1 meter this means were simulating fluid in a 1m x 
 
 h_x = physical_width / (width - 1)  # the space between points on the x-axis
 h_y = physical_height / (height - 1)  # the space between points on the y-axis
-
+#TODO add boundary cells
 h = h_x + h_y / 2
 
 grid = np.zeros((height, width, 2))
@@ -34,7 +34,7 @@ o = 1.9 # Overrelaxation
 def compute_next_state():
     modify_velocity_values()
     projection()
-    advection()
+    advectVel()
 
 def modify_velocity_values():
     v_velocity[1:-1, :] += g * dt  
@@ -63,8 +63,21 @@ def projection():
             
             grid[i,j,1] += div / s * (grid[i,j,2] * h) / dt
 
-def advection():
-    pass
+def avgU(i, j):
+    u = (u_velocity[i,j-1] + u_velocity[i,j] + u_velocity[i,j-1] + u_velocity[i+1,j]) / 4
+    return u
+
+def avgV(i, j):
+    v = (v_velocity[i,j-1] + v_velocity[i,j] + v_velocity[i,j-1] + v_velocity[i+1,j]) / 4
+    return v
+
+def advectVel():
+    newU = u_velocity
+    newV = v_velocity
+    
+    for i in range(height):
+        for j in range(width):
+             pass
 
 while current_simulation_time < total_simulation_time:        
     start_real_time = time.time() # Capture the real-world time before processing    
