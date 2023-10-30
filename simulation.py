@@ -19,7 +19,8 @@ total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
 current_simulation_time = 0.0
 
-g = 9.81
+g = 9.81 # gravity
+o = 1.9 # Overrelaxation
 
 def compute_next_state():
     modify_velocity_values()
@@ -44,7 +45,7 @@ def projection():
             if (s == 0.0):
                 continue
             
-            div = u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j]
+            div = o(u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j])
             # TODO add pressure
             u_velocity[i,j] += div * sx0 / s
             u_velocity[i+1,j] -= div * sx1
