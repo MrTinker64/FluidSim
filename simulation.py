@@ -11,14 +11,15 @@ h_y = physical_height / (height - 1)  # the space between points on the y-axis
 
 h = h_x + h_y / 2
 
-grid = np.zeros((height, width, 1))
+grid = np.zeros((height, width, 2))
 
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
+s = np.zeros(height, width) # s (used in divergence calculations)
 
 for i in range(height):
     for j in range(width):
-        grid[i, j] = [0, 0, 0] # initalizes s (used in divergence calculations), pressure, and density as 0
+        grid[i, j] = [0, 0] # initalizes pressure and density as 0
         
 u_velocity[:, :] = 0 # initalizes u_velocities as 0
 v_velocity[:, :] = 0 # initalizes v_velocities as 0
@@ -41,26 +42,26 @@ def modify_velocity_values():
 def projection():
     for i in range(height):
         for j in range(width):
-            if grid[i,j,1] == 0:
+            if s[i,j] == 0:
                 continue
             
-            s = grid[i,j,1]
-            sx0 = grid[i-1,j, 1]
-            sx1 = grid[i+1,j, 1]
-            sy0 = grid[i,j-1, 1]
-            sy1 = grid[i,j+1, 1]
+            s = s[i,j]
+            sx0 = s[i-1,j]
+            sx1 = s[i+1,j]
+            sy0 = s[i,j-1]
+            sy1 = s[i,j+1]
             s = sx0 + sx1 + sy0 + sy1
             if (s == 0.0):
                 continue
             
             div = o(u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j])
-            # TODO add pressure
+
             u_velocity[i,j] += div * sx0 / s
             u_velocity[i+1,j] -= div * sx1
             v_velocity[i,j] += div * sy0
             v_velocity[i,j+1] -= div * sy1
             
-            grid[i,j,2] += div/s * (grid[i,j,3] * h) / dt
+            grid[i,j,1] += div / s * (grid[i,j,2] * h) / dt
 
 def advection():
     pass
