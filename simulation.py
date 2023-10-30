@@ -10,7 +10,7 @@ v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the 
 
 for i in range(height):
     for j in range(width):
-        grid[i, j] = [0] # initalizes divergence as 0
+        grid[i, j] = [0, 0] # initalizes s (used in divergence calculations) and pressure as 0
         
 u_velocity[:, :] = 0 # initalizes u_velocities as 0
 v_velocity[:, :] = 0 # initalizes v_velocities as 0
@@ -32,8 +32,24 @@ def modify_velocity_values():
 def projection():
     for i in range(height):
         for j in range(width):
-            divergence = u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j]
-            grid[i, j, 1] = [divergence]
+            if grid[i,j,1] == 0:
+                continue
+            
+            s = grid[i,j,1]
+            sx0 = grid[i-1,j, 1]
+            sx1 = grid[i+1,j, 1]
+            sy0 = grid[i,j-1, 1]
+            sy1 = grid[i,j+1, 1]
+            s = sx0 + sx1 + sy0 + sy1
+            if (s == 0.0):
+                continue
+            
+            div = u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j]
+            # TODO add pressure
+            u_velocity[i,j] += div * sx0 / s
+            u_velocity[i+1,j] -= div * sx1
+            v_velocity[i,j] += div * sy0
+            v_velocity[i,j+1] -= div * sy1
 
 def advection():
     pass
