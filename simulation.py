@@ -10,7 +10,10 @@ v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the 
 
 for i in range(height):
     for j in range(width):
-        grid[i, j] = [0]
+        grid[i, j] = [0] # initalizes divergence as 0
+        
+u_velocity[:, :] = 0 # initalizes u_velocities as 0
+v_velocity[:, :] = 0 # initalizes v_velocities as 0
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
