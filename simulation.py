@@ -11,6 +11,9 @@ h_y = physical_height / (height - 1)  # the space between points on the y-axis
 #TODO add boundary cells
 h = h_x + h_y / 2
 
+num_x = math.floor(width / h)
+num_y = math.floor(height / h)
+
 grid = np.zeros((height, width, 2))
 
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
