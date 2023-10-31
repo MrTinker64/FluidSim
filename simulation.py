@@ -116,7 +116,7 @@ def advect_vel():
             x = i * h
             y = j * h + h/2
             u = u_velocity[i,j]
-            v = np.average(v_velocity[i,j], v_velocity[i,j+1], v_velocity[i-1,j], v_velocity[i-1,j+1])
+            v = np.average([v_velocity[i,j], v_velocity[i,j+1], v_velocity[i-1,j], v_velocity[i-1,j+1]])
             x = x - dt*u
             y = y - dt*v
             
@@ -128,7 +128,7 @@ def advect_vel():
         for j in range(width):
             x = i * h + h/2
             y = j * h
-            u = np.average(u_velocity[i,j], u_velocity[i,j+1], u_velocity[i-1,j], u_velocity[i-1,j+1])
+            u = np.average([u_velocity[i,j], u_velocity[i,j+1], u_velocity[i-1,j], u_velocity[i-1,j+1]])
             v = v_velocity[i,j]
             x = x - dt*u
             y = y - dt*v
