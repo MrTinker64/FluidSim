@@ -16,12 +16,11 @@ U_FIELD = 0
 V_FIELD = 1
 S_FIELD = 2
 
-grid = np.zeros((height, width, 2))
-
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
 s = np.zeros((height, width)) # s (used in divergence calculations)
-m = np.ones((height, width))
+m = np.ones((height, width)) # density
+rho = np.zeros((height, width)) # pressure
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
@@ -61,7 +60,7 @@ def projection():
             v_velocity[i,j] += div * sy0
             v_velocity[i,j+1] -= div * sy1
             
-            grid[i,j,1] += div / s_member * (grid[i,j,2] * h) / dt
+            rho[i,j] += div / s_member * (m[i,j] * h) / dt
             
 def sample_field(x, y, field):
     n = height
