@@ -61,7 +61,8 @@ def projection():
             v_velocity[i,j+1] -= div * sy1
             
             rho[i,j] += div / s_member * (m[i,j] * h) / dt
-            
+
+# TODO check over this function
 def sample_field(x, y, field):
     n = height
     h1 = 1.0 / h
@@ -95,10 +96,10 @@ def sample_field(x, y, field):
     sx = 1.0 - tx
     sy = 1.0 - ty
 
-    val = sx * sy * f[x0 * n + y0] + \
-        tx * sy * f[x1 * n + y0] + \
-        tx * ty * f[x1 * n + y1] + \
-        sx * ty * f[x0 * n + y1]
+    val = sx * sy * f[x0, y0] + \
+        tx * sy * f[x1, y0] + \
+        tx * ty * f[x1, y1] + \
+        sx * ty * f[x0, y1]
 
     return val
 
@@ -108,8 +109,6 @@ def advect_vel():
     
     for i in range(height):
         for j in range(width + 1):
-    # Compute the full velocity value at the point
-        # figure out the vertical component v bar by averaging surrounding v values
             x = i * h
             y = j * h + h/2
             u = u_velocity[i,j]
@@ -136,7 +135,8 @@ def advect_vel():
             
     u_velocity = new_u.copy()
     v_velocity = new_v.copy()
-    
+
+# TODO check over this function
 def advect_smoke():
     new_m = m.copy()
 
@@ -152,10 +152,10 @@ def advect_smoke():
             if s[i * n + j] != 0.0:
 
                 # Calculate average horizontal velocity in the current cell.
-                u = 0.5 * (u_velocity[i * n + j] + u_velocity[(i + 1) * n + j])
+                u = 0.5 * (u_velocity[i, j] + u_velocity[(i + 1), j])
 
                 # Calculate average vertical velocity in the current cell.
-                v = 0.5 * (v_velocity[i * n + j] + v_velocity[i * n + j + 1])
+                v = 0.5 * (v_velocity[i, j] + v_velocity[i, j + 1])
 
                 # Compute the new positions based on the velocity.
                 # This "traces" where the smoke would come from in the previous timestep.
@@ -163,7 +163,7 @@ def advect_smoke():
                 y = j * h + h2 - dt * v
 
                 # Set the new smoke concentration/density based on the value from the traced position.
-                new_m[i * n + j] = sample_field(x, y, S_FIELD)
+                new_m[i, j] = sample_field(x, y, S_FIELD)
 
     # Update the main smoke concentration/density array with the new values.
     m = new_m.copy()
