@@ -111,8 +111,8 @@ def sample_field(x, y, field):
     return val
 
 def advect_vel():
-    new_u = u_velocity
-    new_v = v_velocity
+    new_u = u_velocity.copy()
+    new_v = v_velocity.copy()
     
     for i in range(height):
         for j in range(width + 1):
@@ -142,11 +142,11 @@ def advect_vel():
             
             new_v[i,j] = v
             
-    u_velocity = new_u
-    v_velocity = new_v
+    u_velocity = new_u.copy()
+    v_velocity = new_v.copy()
     
 def advect_smoke():
-    new_m = m
+    new_m = m.copy()
 
     n = height
 
@@ -174,7 +174,7 @@ def advect_smoke():
                 new_m[i * n + j] = sample_field(x, y, S_FIELD)
 
     # Update the main smoke concentration/density array with the new values.
-    m = new_m
+    m = new_m.copy()
 
 while current_simulation_time < total_simulation_time:        
     start_real_time = time.time() # Capture the real-world time before processing    
