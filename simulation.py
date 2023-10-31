@@ -39,8 +39,8 @@ def modify_velocity_values():
     v_velocity[1:-1, :] += g * dt  
 
 def projection():
-    for i in range(height):
-        for j in range(width):
+    for i in range(width):
+        for j in range(height):
             if s[i,j] == 0:
                 continue
             
@@ -111,8 +111,8 @@ def advect_vel():
     new_u = u_velocity.copy()
     new_v = v_velocity.copy()
     
-    for i in range(height):
-        for j in range(width + 1):
+    for i in range(width):
+        for j in range(height + 1):
             x = i * h
             y = j * h + h/2
             u = u_velocity[i,j]
@@ -151,8 +151,8 @@ def advect_smoke():
     h2 = 0.5 * h
 
     # Iterate over all cells, excluding boundary cells.
-    for i in range(height):
-        for j in range(width):
+    for i in range(width):
+        for j in range(height):
 
             # If the cell isn't empty (i.e., has smoke or substance).
             if s[i * n + j] != 0.0:
