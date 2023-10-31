@@ -20,8 +20,8 @@ grid = np.zeros((height, width, 2))
 
 u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
-s = np.zeros(height, width) # s (used in divergence calculations)
-m = np.ones(height, width)
+s = np.zeros((height, width)) # s (used in divergence calculations)
+m = np.ones((height, width))
 
 for i in range(height):
     for j in range(width):
