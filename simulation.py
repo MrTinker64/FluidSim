@@ -16,11 +16,11 @@ U_FIELD = 0
 V_FIELD = 1
 S_FIELD = 2
 
-u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on the vertical faces of the cells
-v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
-s = np.zeros((height, width)) # s (used in divergence calculations)
-m = np.ones((height, width)) # density
-p = np.zeros((height, width)) # pressure
+u_velocity = np.zeros((height, width + 3))  # horizontal velocity, located on the vertical faces of the cells
+v_velocity = np.zeros((height + 3, width))  # vertical velocity, located on the horizontal faces of the cells
+s = np.zeros((height + 2, width + 2)) # s (used in divergence calculations)
+m = np.ones((height + 2, width + 2)) # density
+p = np.zeros((height + 2, width + 2)) # pressure
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
@@ -36,11 +36,28 @@ def compute_next_state():
     advect_smoke()
 
 def modify_velocity_values():
-    v_velocity[1:-1, :] += g * dt  
+    v_velocity[2:-2, :] += g * dt  
+    # Left and right walls
+    u_velocity[:, 0] = 0
+    u_velocity[:, -1] = 0
+    v_velocity[:, 1] = -v_velocity[:, 2]  # Reflective condition
+    v_velocity[:, -2] = -v_velocity[:, -3]  # Reflective condition
+    s[:, 0] = 0
+    s[:, -1] = 0
+
+    # Top and bottom walls
+    v_velocity[0, :] = 0
+    v_velocity[-1, :] = 0
+    u_velocity[1, :] = -u_velocity[2, :]  # Reflective condition
+    u_velocity[-2, :] = -u_velocity[-3, :]  # Reflective condition
+    s[0, :] = 0
+    s[-1, :] = 0
 
 def projection():
     for i in range(width):
         for j in range(height):
+            if i == 0 or i == width + 1 or j == 0 or j == height + 1:
+                continue
             if s[i,j] == 0:
                 continue
             
@@ -113,6 +130,8 @@ def advect_vel():
     
     for i in range(width):
         for j in range(height + 1):
+            if i == 0 or i == width + 1 or j == 0 or j == height + 1:
+                continue
             x = i * h
             y = j * h + h/2
             u = u_velocity[i,j]
@@ -126,6 +145,8 @@ def advect_vel():
             
     for i in range(height + 1):
         for j in range(width):
+            if i == 0 or i == width + 1 or j == 0 or j == height + 1:
+                continue
             x = i * h + h/2
             y = j * h
             u = np.average([u_velocity[i,j], u_velocity[i,j+1], u_velocity[i-1,j], u_velocity[i-1,j+1]])
@@ -140,7 +161,6 @@ def advect_vel():
     u_velocity = new_u.copy()
     v_velocity = new_v.copy()
 
-# TODO check over this function
 def advect_smoke():
     global m
     
@@ -151,6 +171,8 @@ def advect_smoke():
     # Iterate over all cells, excluding boundary cells.
     for i in range(width):
         for j in range(height):
+            if i == 0 or i == width + 1 or j == 0 or j == height + 1:
+                continue
 
             # If the cell isn't empty (i.e., has smoke or substance).
             if s[i, j] != 0.0:
