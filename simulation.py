@@ -52,23 +52,23 @@ def projection():
             if s[i,j] == 0:
                 continue
             
-            s = s[i,j]
+            s_member = s[i,j]
             sx0 = s[i-1,j]
             sx1 = s[i+1,j]
             sy0 = s[i,j-1]
             sy1 = s[i,j+1]
-            s = sx0 + sx1 + sy0 + sy1
-            if (s == 0.0):
+            s_member = sx0 + sx1 + sy0 + sy1
+            if (s_member == 0.0):
                 continue
             
             div = o(u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j])
 
-            u_velocity[i,j] += div * sx0 / s
+            u_velocity[i,j] += div * sx0 / s_member
             u_velocity[i+1,j] -= div * sx1
             v_velocity[i,j] += div * sy0
             v_velocity[i,j+1] -= div * sy1
             
-            grid[i,j,1] += div / s * (grid[i,j,2] * h) / dt
+            grid[i,j,1] += div / s_member * (grid[i,j,2] * h) / dt
             
 def sample_field(x, y, field):
     n = height
