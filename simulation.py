@@ -171,7 +171,7 @@ def advect_smoke():
 while current_simulation_time < total_simulation_time:        
     start_real_time = time.time() # Capture the real-world time before processing    
     
-    state = compute_next_state(state, dt)
+    state = compute_next_state()
     
     current_simulation_time += dt
     
