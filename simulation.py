@@ -20,7 +20,7 @@ u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on th
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
 s = np.zeros((height, width)) # s (used in divergence calculations)
 m = np.ones((height, width)) # density
-rho = np.zeros((height, width)) # pressure
+p = np.zeros((height, width)) # pressure
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
@@ -60,7 +60,7 @@ def projection():
             v_velocity[i,j] += div * sy0
             v_velocity[i,j+1] -= div * sy1
             
-            rho[i,j] += div / s_member * (m[i,j] * h) / dt
+            p[i,j] += div / s_member * (m[i,j] * h) / dt
 
 # TODO check over this function
 def sample_field(x, y, field):
