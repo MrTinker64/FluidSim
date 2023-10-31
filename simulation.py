@@ -129,8 +129,8 @@ def advect_vel():
             
             new_u[i,j] = u
             
-    for i in range(height):
-        for j in range(width + 1):
+    for i in range(height + 1):
+        for j in range(width):
             x = i * h + h/2
             y = j * h
             u = (u_velocity[i,j], u_velocity[i,j+1], u_velocity[i-1,j], u_velocity[i-1,j+1]) / 4
