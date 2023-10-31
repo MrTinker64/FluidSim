@@ -61,7 +61,7 @@ def projection():
             if (s_member == 0.0):
                 continue
             
-            div = o(u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j])
+            div = o*(u_velocity[i+1,j] - u_velocity[i,j] + v_velocity[i,j+1] - v_velocity[i,j])
 
             u_velocity[i,j] += div * sx0 / s_member
             u_velocity[i+1,j] -= div * sx1
