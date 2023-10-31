@@ -62,11 +62,11 @@ def projection():
             
             p[i,j] += div / s_member * (m[i,j] * h) / dt
 
-# TODO check over this function
 def sample_field(x, y, field):
     h1 = 1.0 / h
     h2 = 0.5 * h
 
+    # ! Potentially problematic
     x = max(min(x, width * h), h)
     y = max(min(y, height * h), h)
 
@@ -146,8 +146,6 @@ def advect_smoke():
     
     new_m = m.copy()
 
-    n = height
-
     h2 = 0.5 * h
 
     # Iterate over all cells, excluding boundary cells.
@@ -155,13 +153,13 @@ def advect_smoke():
         for j in range(height):
 
             # If the cell isn't empty (i.e., has smoke or substance).
-            if s[i * n + j] != 0.0:
+            if s[i, j] != 0.0:
 
                 # Calculate average horizontal velocity in the current cell.
-                u = 0.5 * (u_velocity[i, j] + u_velocity[(i + 1), j])
+                u = np.average([u_velocity[i, j] + u_velocity[(i + 1), j]])
 
                 # Calculate average vertical velocity in the current cell.
-                v = 0.5 * (v_velocity[i, j] + v_velocity[i, j + 1])
+                v = np.average([v_velocity[i, j] + v_velocity[i, j + 1]])
 
                 # Compute the new positions based on the velocity.
                 # This "traces" where the smoke would come from in the previous timestep.
