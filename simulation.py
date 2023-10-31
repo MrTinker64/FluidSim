@@ -22,13 +22,6 @@ u_velocity = np.zeros((height, width + 1))  # horizontal velocity, located on th
 v_velocity = np.zeros((height + 1, width))  # vertical velocity, located on the horizontal faces of the cells
 s = np.zeros((height, width)) # s (used in divergence calculations)
 m = np.ones((height, width))
-
-for i in range(height):
-    for j in range(width):
-        grid[i, j] = [0, 0] # initalizes pressure and density as 0
-        
-u_velocity[:, :] = 0 # initalizes u_velocities as 0
-v_velocity[:, :] = 0 # initalizes v_velocities as 0
         
 total_simulation_time = 10.0  # 10 seconds
 dt = 0.01  # 0.01 seconds (10 milliseconds)
